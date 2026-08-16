@@ -5,6 +5,7 @@ use clap::Parser;
 use colored::Colorize;
 
 mod day01;
+mod day02;
 
 #[derive(Parser, Debug)]
 struct Args {
@@ -26,6 +27,7 @@ fn main() -> Result<()> {
     } else {
         let (res_1, res_2) = match args.day {
             1 => day01::solve(&input_file)?,
+            2 => day02::solve(&input_file)?,
             _ => unimplemented!("day{:02} is not implemented", args.day),
         };
         if let Some(res_1) = res_1 {
