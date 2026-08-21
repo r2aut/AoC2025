@@ -14,3 +14,4 @@ Tasks of the Advent of Code 2025:
 - [Day 6: Trash Compactor](docs/day06.md)
 - [Day 7: Laboratories](docs/day07.md)
 - [Day 8: Playground](docs/day08.md)
+- [Day 9: Movie Theater](docs/day09.md)
