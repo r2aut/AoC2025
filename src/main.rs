@@ -13,6 +13,8 @@ mod day06;
 mod day07;
 mod day08;
 mod day09;
+// mod day10;
+mod day11;
 
 #[derive(Parser, Debug)]
 struct Args {
@@ -42,6 +44,8 @@ fn main() -> Result<()> {
             7 => day07::solve(&input_file)?,
             8 => day08::solve(&input_file)?,
             9 => day09::solve(&input_file)?,
+            // 10 => day10::solve(&input_file)?,
+            11 => day11::solve(&input_file)?,
             _ => unimplemented!("day{:02} is not implemented", args.day),
         };
         if let Some(res_1) = res_1 {
