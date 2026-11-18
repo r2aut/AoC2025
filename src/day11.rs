@@ -3,9 +3,8 @@
 //! <https://adventofcode.com/2025/day/11>
 
 use anyhow::Result;
-use aoc2025::get_reader;
 use petgraph::graph::{DiGraph, NodeIndex};
-use std::{collections::HashMap, io::BufRead, path::Path};
+use std::{collections::HashMap, io::BufRead};
 
 struct Devices {
     graph: DiGraph<String, u32>,
@@ -105,8 +104,8 @@ fn part_two(devices: &Devices) -> Option<usize> {
     Some(res_a + res_b)
 }
 
-pub fn solve(input_file: &Path) -> Result<(Option<String>, Option<String>)> {
-    let reader = get_reader(input_file)?;
+#[cfg(not(tarpaulin_include))]
+pub fn solve(reader: impl BufRead) -> Result<(Option<String>, Option<String>)> {
     let dev = DevicesParser::try_from_aoc_reader(reader)?;
     let res1 = part_one(&dev).map(|r| r.to_string());
     let res2 = part_two(&dev).map(|r| r.to_string());

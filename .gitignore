@@ -1,5 +1,7 @@
 /target/
+/save/
 /.vscode/
 /.idea/
 .env
+tarpaulin-report.*
 

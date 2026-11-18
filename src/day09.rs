@@ -8,11 +8,9 @@ use std::{
     cmp::{max, min},
     collections::HashMap,
     fmt::{Debug, Display, Write},
-    fs::File,
     hash::Hash,
-    io::{BufRead, BufReader},
+    io::BufRead,
     ops::Index,
-    path::Path,
 };
 
 use anyhow::Result;
@@ -465,9 +463,8 @@ impl Rectangle {
 }
 
 /// Solve day09
-pub fn solve(input_file: &Path) -> Result<(Option<String>, Option<String>)> {
-    let file = File::open(input_file)?;
-    let reader = BufReader::new(file);
+#[cfg(not(tarpaulin_include))]
+pub fn solve(reader: impl BufRead) -> Result<(Option<String>, Option<String>)> {
     let theater = read_theater(reader)?;
 
     let res1 = part_one(&theater).map(|v| v.to_string());

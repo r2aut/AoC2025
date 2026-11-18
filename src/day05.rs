@@ -3,27 +3,9 @@
 //! <https://adventofcode.com/2025/day/5>
 
 use anyhow::Result;
-use std::{
-    fs::File,
-    io::{BufRead, BufReader},
-    ops::Sub,
-    path::Path,
-};
+use std::{io::BufRead, ops::Sub};
 
 type Ingredient = u128;
-
-/// Solve day04
-pub fn solve(input_file: &Path) -> Result<(Option<String>, Option<String>)> {
-    let file = File::open(input_file)?;
-    let mut reader = BufReader::new(file);
-    let (mut intervals, ingredients) = read_data::<Ingredient>(&mut reader)?;
-    intervals.combine_all_possible();
-
-    let res1 = part_one::<Ingredient>(&intervals, ingredients).to_string();
-    let res2 = part_two(&intervals).to_string();
-
-    Ok((Some(res1), Some(res2)))
-}
 
 /// Interval of ingredients (T-ingredient type)
 #[derive(Debug, Clone, Copy)]
@@ -158,6 +140,18 @@ where
     <T as TryInto<usize>>::Error: std::fmt::Debug,
 {
     intervals.0.iter().map(|i| i.length()).sum()
+}
+
+/// Solve day04
+#[cfg(not(tarpaulin_include))]
+pub fn solve(mut reader: impl BufRead) -> Result<(Option<String>, Option<String>)> {
+    let (mut intervals, ingredients) = read_data::<Ingredient>(&mut reader)?;
+    intervals.combine_all_possible();
+
+    let res1 = part_one::<Ingredient>(&intervals, ingredients).to_string();
+    let res2 = part_two(&intervals).to_string();
+
+    Ok((Some(res1), Some(res2)))
 }
 
 #[cfg(test)]

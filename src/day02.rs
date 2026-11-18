@@ -3,34 +3,7 @@
 //! <https://adventofcode.com/2025/day/2>
 
 use anyhow::Result;
-use std::{
-    fs::File,
-    io::{BufRead, BufReader},
-    path::Path,
-};
-
-/// Skeleton function for day solution
-pub fn solve(input_file: &Path) -> Result<(Option<String>, Option<String>)> {
-    let file = File::open(input_file)?;
-    let mut reader = BufReader::new(file);
-    let intervals = read_data(&mut reader)?;
-    let res_1 = check_intervals(&intervals, is_pair_valid).to_string();
-    let res_2 = check_intervals(&intervals, is_any_valid).to_string();
-    Ok((Some(res_1), Some(res_2)))
-}
-
-/// Read intervals from file
-pub fn read_data(reader: &mut impl BufRead) -> Result<Vec<(u128, u128)>> {
-    let mut data: Vec<(u128, u128)> = Vec::new();
-    let mut buf: String = String::new();
-    reader.read_line(&mut buf)?;
-    let intervals: Vec<&str> = buf.trim().split(',').collect();
-    for int in intervals {
-        let borders: Vec<&str> = int.split('-').collect();
-        data.push((borders[0].parse()?, borders[1].parse()?));
-    }
-    Ok(data)
-}
+use std::io::BufRead;
 
 /// Checks if the id is valid according to rules in part one
 pub fn is_pair_valid(id: u128) -> bool {
@@ -84,6 +57,28 @@ pub fn check_intervals(intervals: &Vec<(u128, u128)>, validity_func: fn(u128) ->
         }
     }
     cnt
+}
+
+/// Read intervals from file
+pub fn read_data(reader: &mut impl BufRead) -> Result<Vec<(u128, u128)>> {
+    let mut data: Vec<(u128, u128)> = Vec::new();
+    let mut buf: String = String::new();
+    reader.read_line(&mut buf)?;
+    let intervals: Vec<&str> = buf.trim().split(',').collect();
+    for int in intervals {
+        let borders: Vec<&str> = int.split('-').collect();
+        data.push((borders[0].parse()?, borders[1].parse()?));
+    }
+    Ok(data)
+}
+
+/// Skeleton function for day solution
+#[cfg(not(tarpaulin_include))]
+pub fn solve(mut reader: impl BufRead) -> Result<(Option<String>, Option<String>)> {
+    let intervals = read_data(&mut reader)?;
+    let res_1 = check_intervals(&intervals, is_pair_valid).to_string();
+    let res_2 = check_intervals(&intervals, is_any_valid).to_string();
+    Ok((Some(res_1), Some(res_2)))
 }
 
 #[cfg(test)]

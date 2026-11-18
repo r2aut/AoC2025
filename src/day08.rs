@@ -6,25 +6,7 @@ use anyhow::Result;
 use itertools::Itertools;
 use petgraph::algo::{connected_components, tarjan_scc};
 use petgraph::graph::{NodeIndex, UnGraph};
-use std::{
-    fs::File,
-    io::{BufRead, BufReader},
-    path::Path,
-};
-
-/// Solve day08
-pub fn solve(input_file: &Path) -> Result<(Option<String>, Option<String>)> {
-    let num = 1000;
-    let file = File::open(input_file)?;
-    let reader = BufReader::new(file);
-    let graph = read_data(reader)?;
-
-    let distances = calc_distances(&graph);
-    let res1 = part_one(graph.clone(), &distances, num).to_string();
-    let res2 = part_two(graph, &distances).to_string();
-
-    Ok((Some(res1), Some(res2)))
-}
+use std::io::BufRead;
 
 type Distance = u64;
 type JBoxGraph = UnGraph<JBox, Distance>;
@@ -113,6 +95,19 @@ fn part_two(mut graph: JBoxGraph, distances: &[DistanceRec]) -> i64 {
         }
     }
     last_x0 * last_x1
+}
+
+/// Solve day08
+#[cfg(not(tarpaulin_include))]
+pub fn solve(reader: impl BufRead) -> Result<(Option<String>, Option<String>)> {
+    let num = 1000;
+    let graph = read_data(reader)?;
+
+    let distances = calc_distances(&graph);
+    let res1 = part_one(graph.clone(), &distances, num).to_string();
+    let res2 = part_two(graph, &distances).to_string();
+
+    Ok((Some(res1), Some(res2)))
 }
 
 #[cfg(test)]

@@ -6,20 +6,8 @@ use anyhow::Result;
 use std::{
     cmp::{max, min},
     collections::HashSet,
-    fs::File,
-    io::{BufRead, BufReader},
-    path::Path,
+    io::BufRead,
 };
-
-/// Solve day04
-pub fn solve(input_file: &Path) -> Result<(Option<String>, Option<String>)> {
-    let file = File::open(input_file)?;
-    let reader = BufReader::new(file);
-    let mut grid = read_data(reader)?;
-    let res_1 = grid.get_all_accessible_rolls().len().to_string();
-    let res_2 = grid.get_off_rolls().to_string();
-    Ok((Some(res_1), Some(res_2)))
-}
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 struct Position {
@@ -124,6 +112,15 @@ fn read_data(reader: impl BufRead) -> Result<RollGrid> {
     }
     rg.calc_borders();
     Ok(rg)
+}
+
+/// Solve day04
+#[cfg(not(tarpaulin_include))]
+pub fn solve(reader: impl BufRead) -> Result<(Option<String>, Option<String>)> {
+    let mut grid = read_data(reader)?;
+    let res_1 = grid.get_all_accessible_rolls().len().to_string();
+    let res_2 = grid.get_off_rolls().to_string();
+    Ok((Some(res_1), Some(res_2)))
 }
 
 #[cfg(test)]

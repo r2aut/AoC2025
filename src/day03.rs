@@ -3,21 +3,7 @@
 //! <https://adventofcode.com/2025/day/3>
 
 use anyhow::Result;
-use std::{
-    fs::File,
-    io::{BufRead, BufReader},
-    path::Path,
-};
-
-/// Solve day03
-pub fn solve(input_file: &Path) -> Result<(Option<String>, Option<String>)> {
-    let file = File::open(input_file)?;
-    let mut reader = BufReader::new(file);
-    let batteries = read_batteries(&mut reader)?;
-    let res_1 = get_max_sum_joltage(&batteries, 2).to_string();
-    let res_2 = get_max_sum_joltage(&batteries, 12).to_string();
-    Ok((Some(res_1), Some(res_2)))
-}
+use std::io::BufRead;
 
 /// Get index of maximal element in the battery slice
 fn get_max_element_index(elements: &[u8]) -> Option<usize> {
@@ -64,6 +50,15 @@ fn read_batteries(reader: impl BufRead) -> Result<Vec<String>> {
         result.push(line?.trim().to_string());
     }
     Ok(result)
+}
+
+/// Solve day03
+#[cfg(not(tarpaulin_include))]
+pub fn solve(mut reader: impl BufRead) -> Result<(Option<String>, Option<String>)> {
+    let batteries = read_batteries(&mut reader)?;
+    let res_1 = get_max_sum_joltage(&batteries, 2).to_string();
+    let res_2 = get_max_sum_joltage(&batteries, 12).to_string();
+    Ok((Some(res_1), Some(res_2)))
 }
 
 #[cfg(test)]

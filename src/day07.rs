@@ -5,22 +5,8 @@
 use anyhow::Result;
 use std::{
     fmt::{Display, Write},
-    fs::File,
-    io::{BufRead, BufReader},
-    path::Path,
+    io::BufRead,
 };
-
-/// Solve day07
-pub fn solve(input_file: &Path) -> Result<(Option<String>, Option<String>)> {
-    let file = File::open(input_file)?;
-    let reader = BufReader::new(file);
-    let mut manifold = read_data(reader)?;
-    manifold.propagate_all();
-    let res1 = part_one(&manifold).to_string();
-    let res2 = part_two(&manifold).to_string();
-
-    Ok((Some(res1), Some(res2)))
-}
 
 /// One place of the manifold
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -35,6 +21,7 @@ impl Default for Tile {
     }
 }
 impl Display for Tile {
+    #[cfg(not(tarpaulin_include))]
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             Self::Space(x) => {
@@ -148,6 +135,7 @@ impl Manifold {
     }
 }
 impl Display for Manifold {
+    #[cfg(not(tarpaulin_include))]
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         for row in &self.0 {
             for tile in row {
@@ -157,17 +145,6 @@ impl Display for Manifold {
         }
         Ok(())
     }
-}
-
-/// Solve part one
-fn part_one(manifold: &Manifold) -> u64 {
-    manifold.get_used_splitters()
-    // let res2 = data.get_ways(data.0.len() - 1).to_string();
-}
-
-/// Solve part two
-fn part_two(manifold: &Manifold) -> u64 {
-    manifold.get_ways(manifold.0.len() - 1)
 }
 
 /// Read data from file
@@ -181,6 +158,28 @@ fn read_data(reader: impl BufRead) -> Result<Manifold> {
         result.0.push(tile_line);
     }
     Ok(result)
+}
+
+/// Solve part one
+fn part_one(manifold: &Manifold) -> u64 {
+    manifold.get_used_splitters()
+    // let res2 = data.get_ways(data.0.len() - 1).to_string();
+}
+
+/// Solve part two
+fn part_two(manifold: &Manifold) -> u64 {
+    manifold.get_ways(manifold.0.len() - 1)
+}
+
+/// Solve day07
+#[cfg(not(tarpaulin_include))]
+pub fn solve(reader: impl BufRead) -> Result<(Option<String>, Option<String>)> {
+    let mut manifold = read_data(reader)?;
+    manifold.propagate_all();
+    let res1 = part_one(&manifold).to_string();
+    let res2 = part_two(&manifold).to_string();
+
+    Ok((Some(res1), Some(res2)))
 }
 
 #[cfg(test)]

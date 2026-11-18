@@ -3,25 +3,9 @@
 //! <https://adventofcode.com/2025/day/6>
 
 use anyhow::Result;
-use std::{
-    fs::File,
-    io::{BufRead, BufReader},
-    path::Path,
-};
+use std::io::BufRead;
 
 type Mem = Vec<Vec<char>>;
-
-/// Solve day06
-pub fn solve(input_file: &Path) -> Result<(Option<String>, Option<String>)> {
-    let file = File::open(input_file)?;
-    let reader = BufReader::new(file);
-    let data = read_data(reader)?;
-
-    let res1 = part_one(&data).to_string();
-    let res2 = part_two(&data).to_string();
-
-    Ok((Some(res1), Some(res2)))
-}
 
 fn read_data(reader: impl BufRead) -> Result<Vec<Problem>> {
     let mut result: Vec<Problem> = Vec::new();
@@ -135,6 +119,17 @@ fn part_one(data: &[Problem]) -> i64 {
 
 fn part_two(data: &[Problem]) -> i64 {
     data.iter().map(|p| p.calc_value_by_columns()).sum::<i64>()
+}
+
+/// Solve day06
+#[cfg(not(tarpaulin_include))]
+pub fn solve(reader: impl BufRead) -> Result<(Option<String>, Option<String>)> {
+    let data = read_data(reader)?;
+
+    let res1 = part_one(&data).to_string();
+    let res2 = part_two(&data).to_string();
+
+    Ok((Some(res1), Some(res2)))
 }
 
 #[cfg(test)]

@@ -3,26 +3,7 @@
 //! <https://adventofcode.com/2025/day/1>
 
 use anyhow::{Result, anyhow};
-use std::path::Path;
-use std::{
-    fs::File,
-    io::{BufRead, BufReader},
-};
-
-/// Solve day01
-pub fn solve(input_file: &Path) -> Result<(Option<String>, Option<String>)> {
-    let file = File::open(input_file)?;
-    let reader = BufReader::new(file);
-    let data = read_rotations(reader)?;
-    let mut disk = DialDisk::new();
-    for rotation in data {
-        disk.rotate(rotation);
-    }
-    let res_1 = Some(disk.ended_zeros_cnt.to_string());
-    let res_2 = Some(disk.passed_zero_cnt.to_string());
-
-    Ok((res_1, res_2))
-}
+use std::io::BufRead;
 
 /// Вращение диска в кликах: right - positive, left - negative
 type Rotation = i32;
@@ -79,6 +60,20 @@ fn read_rotations(reader: impl BufRead) -> Result<Vec<Rotation>> {
         });
     }
     Ok(res)
+}
+
+/// Solve day01
+#[cfg(not(tarpaulin_include))]
+pub fn solve(reader: impl BufRead) -> Result<(Option<String>, Option<String>)> {
+    let data = read_rotations(reader)?;
+    let mut disk = DialDisk::new();
+    for rotation in data {
+        disk.rotate(rotation);
+    }
+    let res_1 = Some(disk.ended_zeros_cnt.to_string());
+    let res_2 = Some(disk.passed_zero_cnt.to_string());
+
+    Ok((res_1, res_2))
 }
 
 #[cfg(test)]
